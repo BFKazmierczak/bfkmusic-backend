@@ -1,10 +1,22 @@
 module.exports = ({ env }) => ({
-  host: env('HOST', '0.0.0.0'),
-  port: env.int('PORT', 1337),
+  host: env("HOST", "127.0.0.1"),
+  port: env.int("PORT", 1337),
   app: {
-    keys: env.array('APP_KEYS'),
+    keys: env.array("APP_KEYS"),
   },
   webhooks: {
-    populateRelations: env.bool('WEBHOOKS_POPULATE_RELATIONS', false),
+    populateRelations: env.bool("WEBHOOKS_POPULATE_RELATIONS", false),
+  },
+  middleware: {
+    settings: {
+      cors: {
+        enabled: true,
+        origin: env(
+          "CORS_ORIGIN",
+          "http://localhost:3000,http://127.0.0.1:3000,http://localhost:1337"
+        ).split(","), // Specify the allowed origin(s) here
+        // headers: ["Content-Type", "Authorization"],
+      },
+    },
   },
 });

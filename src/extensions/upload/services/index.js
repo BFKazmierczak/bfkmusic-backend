@@ -1,11 +1,12 @@
 const ffmpeg = require("fluent-ffmpeg");
+const ffprobeStatic = require("ffprobe-static");
 
 module.exports = {
   calculateDuration: async (file) => {
-    strapi.log("passed file:", file);
+    console.log("file:", file.url);
 
     return new Promise((resolve, reject) => {
-      ffmpeg.ffprobe(file.path, (err, metadata) => {
+      ffmpeg.ffprobe(`./public${file.url}`, (err, metadata) => {
         if (err) reject(err);
         else {
           const durationInSeconds = metadata.format.duration;

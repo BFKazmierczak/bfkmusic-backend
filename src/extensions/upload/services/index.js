@@ -1,12 +1,18 @@
+const path = require("path");
 const ffmpeg = require("fluent-ffmpeg");
-const ffprobeStatic = require("ffprobe-static");
+const ffprobe = require("ffprobe-static");
 
 module.exports = {
   calculateDuration: async (file) => {
-    console.log("file:", file.url);
+    ffmpeg.setFfprobePath(ffprobe.path);
+
+    const rootDir = path.resolve(__dirname, "../../../..");
+    const filePath = path.join(rootDir, "public", file.url);
+
+    console.log("FILEPATH:", filePath);
 
     return new Promise((resolve, reject) => {
-      ffmpeg.ffprobe(`./public${file.url}`, (err, metadata) => {
+      ffmpeg.ffprobe(filePath, (err, metadata) => {
         if (err) reject(err);
         else {
           const durationInSeconds = metadata.format.duration;

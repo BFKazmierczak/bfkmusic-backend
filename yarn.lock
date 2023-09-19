@@ -4463,6 +4463,18 @@
   "resolved" "https://registry.npmjs.org/fecha/-/fecha-4.2.3.tgz"
   "version" "4.2.3"
 
+"ffmpeg@^0.0.4":
+  "integrity" "sha512-3TgWUJJlZGQn+crJFyhsO/oNeRRnGTy6GhgS98oUCIfZrOW5haPPV7DUfOm3xJcHr5q3TJpjk2GudPutrNisRA=="
+  "resolved" "https://registry.npmjs.org/ffmpeg/-/ffmpeg-0.0.4.tgz"
+  "version" "0.0.4"
+  dependencies:
+    "when" ">= 0.0.1"
+
+"ffprobe-static@^3.1.0":
+  "integrity" "sha512-Dvpa9uhVMOYivhHKWLGDoa512J751qN1WZAIO+Xw4L/mrUSPxS4DApzSUDbCFE/LUq2+xYnznEahTd63AqBSpA=="
+  "resolved" "https://registry.npmjs.org/ffprobe-static/-/ffprobe-static-3.1.0.tgz"
+  "version" "3.1.0"
+
 "figures@^3.0.0":
   "integrity" "sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg=="
   "resolved" "https://registry.npmjs.org/figures/-/figures-3.2.0.tgz"
@@ -9472,6 +9484,11 @@
   dependencies:
     "tr46" "~0.0.3"
     "webidl-conversions" "^3.0.0"
+
+"when@>= 0.0.1":
+  "integrity" "sha512-5cZ7mecD3eYcMiCH4wtRPA5iFJZ50BJYDfckI5RRpQiktMiYTcn0ccLTZOvcbBume+1304fQztxeNzNS9Gvrnw=="
+  "resolved" "https://registry.npmjs.org/when/-/when-3.7.8.tgz"
+  "version" "3.7.8"
 
 "which@^1.1.1", "which@^1.2.14", "which@^1.2.9":
   "integrity" "sha512-HxJdYWq1MTIQbJ3nw0cqssHoTNU267KlrDuGZ1WYlxDStUtKUhOaJmh112/TZmHxxUfuJqPXSOm7tDyas0OSIQ=="

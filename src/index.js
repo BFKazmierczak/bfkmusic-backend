@@ -19,26 +19,38 @@ module.exports = {
         Query: {
           comments: {
             resolve: async (parent, args, context) => {
+              const { transformArgs } = strapi
+                .plugin("graphql")
+                .service("builders").utils;
+
+              const transformedArgs = transformArgs(args, {
+                contentType: strapi.contentTypes["api::comment.comment"],
+                usePagination: true,
+              });
+
               const { toEntityResponseCollection } = strapi.service(
                 "plugin::graphql.format"
               ).returnTypes;
 
               const userId = context.state.user.id;
 
+              transformedArgs.filters = {
+                ...transformedArgs.filters,
+                user: {
+                  id: { $eq: userId },
+                },
+              };
+
               const data = await strapi.entityService.findMany(
                 "api::comment.comment",
                 {
-                  filters: {
-                    user: {
-                      id: { $eq: userId },
-                    },
-                  },
+                  ...transformedArgs,
                   populate: "user",
                 }
               );
 
               const response = toEntityResponseCollection(data, {
-                args: {},
+                args,
                 resourceUID: "api::comment.comment",
               });
 

@@ -24,6 +24,16 @@
     "fileId": {
       "type": "integer",
       "required": true
+    },
+    "timeRange": {
+      "type": "string",
+      "required": true
+    },
+    "song": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::song.song",
+      "inversedBy": "comments"
     }
   }
 }

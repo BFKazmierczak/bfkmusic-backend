@@ -16,8 +16,12 @@
     "@strapi/strapi": "4.12.0",
     "better-sqlite3": "8.0.1",
     "ffmpeg": "^0.0.4",
+    "ffmpeg-static": "^5.2.0",
     "ffprobe-static": "^3.1.0",
-    "fluent-ffmpeg": "^2.1.2"
+    "fluent-ffmpeg": "^2.1.2",
+    "waveform-data": "^4.3.0",
+    "waveform-node": "^0.3.1",
+    "web-audio-api": "^0.2.2"
   },
   "author": {
     "name": "A Strapi developer"
@@ -29,5 +33,6 @@
     "node": ">=14.19.1 <=18.x.x",
     "npm": ">=6.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {}
 }

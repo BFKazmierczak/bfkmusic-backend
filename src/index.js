@@ -18,6 +18,36 @@ module.exports = {
       .plugin("graphql")
       .service("builders").utils;
 
+    async function resolveComments(parent, args, context) {
+      const transformedArgs = transformArgs(args, {
+        contentType: strapi.contentTypes["api::comment.comment"],
+        usePagination: true,
+      });
+
+      const userId = context.state.user.id;
+
+      console.log("inside comments resolver");
+
+      transformedArgs.filters = {
+        ...transformedArgs.filters,
+        user: {
+          id: { $eq: userId },
+        },
+      };
+
+      const data = await strapi.entityService.findMany("api::comment.comment", {
+        ...transformedArgs,
+        populate: "user",
+      });
+
+      const response = toEntityResponseCollection(data, {
+        args,
+        resourceUID: "api::comment.comment",
+      });
+
+      return response;
+    }
+
     // const { formatGraphqlError } = strapi.plugin("graphql").formatGraphqlError;
 
     extensionService.use(({ strapi }) => ({
@@ -79,6 +109,7 @@ module.exports = {
                 {
                   data: {
                     ...args.data,
+                    song: args.data.songId,
                     user: userId,
                     timeRange,
                     publishedAt: new Date(),
@@ -96,36 +127,7 @@ module.exports = {
         },
         Query: {
           comments: {
-            resolve: async (parent, args, context) => {
-              const transformedArgs = transformArgs(args, {
-                contentType: strapi.contentTypes["api::comment.comment"],
-                usePagination: true,
-              });
-
-              const userId = context.state.user.id;
-
-              transformedArgs.filters = {
-                ...transformedArgs.filters,
-                user: {
-                  id: { $eq: userId },
-                },
-              };
-
-              const data = await strapi.entityService.findMany(
-                "api::comment.comment",
-                {
-                  ...transformedArgs,
-                  populate: "user",
-                }
-              );
-
-              const response = toEntityResponseCollection(data, {
-                args,
-                resourceUID: "api::comment.comment",
-              });
-
-              return response;
-            },
+            resolve: resolveComments,
           },
         },
       },

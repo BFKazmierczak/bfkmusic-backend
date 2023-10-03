@@ -1,4 +1,7 @@
-const sanitize = require("@strapi/utils");
+const path = require("path");
+
+const waveform = require("waveform-node");
+
 const uploadService = require("./services/index");
 
 module.exports = (plugin) => {
@@ -6,12 +9,44 @@ module.exports = (plugin) => {
     async afterCreate(ctx) {
       const file = ctx.result;
 
+      const rootDir = path.resolve(__dirname, "../../..");
+      const filePath = path.join(rootDir, "public", file.url);
+
       try {
+        const newWaveform = await strapi.entityService.create(
+          "api::waveform.waveform",
+          {
+            data: {
+              peaks: null,
+              file: file.id,
+            },
+            populate: "file",
+          }
+        );
+
         const duration = await uploadService.calculateDuration(file);
 
-        const fileToUpdate = await strapi.db
-          .query("plugin::upload.file")
-          .update({ where: { id: file.id }, data: { duration } });
+        await strapi.db.query("plugin::upload.file").update({
+          where: { id: file.id },
+          data: { duration, waveform: newWaveform.id },
+        });
+
+        waveform.getWaveForm(filePath, {}, (error, peaks) => {
+          if (error) {
+            console.log("ERROR:", error);
+            return;
+          }
+
+          strapi.entityService.update(
+            "api::waveform.waveform",
+            newWaveform.id,
+            {
+              data: {
+                peaks,
+              },
+            }
+          );
+        });
 
         // ctx.send(sanitize.(updatedFile, { model: strapi.models.file }));
       } catch (err) {

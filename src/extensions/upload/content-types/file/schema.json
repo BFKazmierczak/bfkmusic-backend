@@ -102,6 +102,12 @@
     },
     "duration": {
       "type": "decimal"
+    },
+    "waveform": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::waveform.waveform",
+      "inversedBy": "file"
     }
   }
 }

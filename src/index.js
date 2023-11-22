@@ -48,6 +48,35 @@ module.exports = {
       return response;
     }
 
+    async function resolveSongs(parent, args, context) {
+      const transformedArgs = transformArgs(args, {
+        contentType: strapi.contentTypes["api::song.song"],
+        usePagination: true,
+      });
+
+      console.log("inside songs resolver");
+
+      const userId = context.state.user.id;
+
+      const data = await strapi.entityService.findMany("api::song.song", {
+        ...transformedArgs,
+      });
+
+      const modifiedData = data.map((song) => ({
+        ...song,
+        inLibrary: true,
+      }));
+
+      console.log(modifiedData);
+
+      const response = toEntityResponseCollection(modifiedData, {
+        args,
+        resourceUID: "api::song.song",
+      });
+
+      return response;
+    }
+
     // const { formatGraphqlError } = strapi.plugin("graphql").formatGraphqlError;
 
     extensionService.use(({ strapi }) => ({
@@ -58,6 +87,12 @@ module.exports = {
 
         type Mutation {
           createComment(data: CustomCommentInput!): CommentEntityResponse
+
+          addSongToLibrary(data: AddSongInput!): SongEntityResponse
+        }
+
+        type Song {
+          inLibrary: Boolean
         }
 
         input CustomCommentInput {
@@ -65,6 +100,11 @@ module.exports = {
           fileId: Int!
           timeRange: TimeRange!
           content: String!
+        }
+
+        input AddSongInput {
+          songId: Int!
+          userId: Int!
         }
 
         input TimeRange {
@@ -128,6 +168,9 @@ module.exports = {
         Query: {
           comments: {
             resolve: resolveComments,
+          },
+          songs: {
+            resolve: resolveSongs,
           },
         },
       },
